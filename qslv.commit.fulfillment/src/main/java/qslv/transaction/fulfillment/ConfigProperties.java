@@ -21,6 +21,8 @@ public class ConfigProperties {
 	private String kafkaCommitRequestQueue;
 	private String kafkaCommitReplyQueue;
 	private int kafkaTimeout;
+	private String kafkaProducerPropertiesPath;
+	private String kafkaConsumerPropertiesPath;
 
 	public String getAitid() {
 		return aitid;
@@ -108,6 +110,22 @@ public class ConfigProperties {
 
 	public void setKafkaCommitReplyQueue(String kafkaCommitReplyQueue) {
 		this.kafkaCommitReplyQueue = kafkaCommitReplyQueue;
+	}
+
+	public String getKafkaProducerPropertiesPath() {
+		return kafkaProducerPropertiesPath;
+	}
+
+	public void setKafkaProducerPropertiesPath(String kafkaProducerPropertiesPath) {
+		this.kafkaProducerPropertiesPath = kafkaProducerPropertiesPath;
+	}
+
+	public String getKafkaConsumerPropertiesPath() {
+		return kafkaConsumerPropertiesPath;
+	}
+
+	public void setKafkaConsumerPropertiesPath(String kafkaConsumerPropertiesPath) {
+		this.kafkaConsumerPropertiesPath = kafkaConsumerPropertiesPath;
 	}
 
 }
