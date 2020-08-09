@@ -27,7 +27,7 @@ import qslv.transaction.response.CommitReservationResponse;
 
 @ExtendWith(MockitoExtension.class)
 public class Unit_KafkaDao_commitReservation {
-	KafkaDao kafkaDao = new KafkaDao();
+	KafkaProducerDao kafkaDao = new KafkaProducerDao();
 	ConfigProperties config = new ConfigProperties();
 	
 	@Mock

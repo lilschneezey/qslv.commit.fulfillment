@@ -15,8 +15,8 @@ import qslv.transaction.request.CommitReservationRequest;
 import qslv.transaction.response.CommitReservationResponse;
 
 @Repository
-public class KafkaDao {
-	private static final Logger log = LoggerFactory.getLogger(KafkaDao.class);
+public class KafkaProducerDao {
+	private static final Logger log = LoggerFactory.getLogger(KafkaProducerDao.class);
 
 	@Autowired
 	private ConfigProperties config;
@@ -35,7 +35,7 @@ public class KafkaDao {
 	public void produceCommit(TraceableMessage<ResponseMessage<CommitReservationRequest,CommitReservationResponse>> message) throws DataAccessException {
 		log.trace("ENTRY produceCommit");
 		try {
-			String key = message.getPayload().getRequest().getAccountNumber();
+			String key = message.getPayload().getRequest()==null ? "NULL_PAYLOAD_KEY_SUBSTITUTE" : message.getPayload().getRequest().getAccountNumber();
 			commitKafkaTemplate.send(config.getKafkaCommitReplyQueue(), key, message).get();
 			log.debug("Kakfa Produce {}", message);
 		} catch ( ExecutionException ex ) {

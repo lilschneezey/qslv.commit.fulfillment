@@ -25,9 +25,9 @@ public class FulfillmentControllerService {
 	@Autowired
 	TransactionDao transactionDao;
 	@Autowired
-	private KafkaDao kafkaDao;
+	private KafkaProducerDao kafkaDao;
 
-	public void setKafkaDao(KafkaDao kafkaDao) {
+	public void setKafkaDao(KafkaProducerDao kafkaDao) {
 		this.kafkaDao = kafkaDao;
 	}
 	public void setConfig(ConfigProperties config) {
@@ -64,8 +64,11 @@ public class FulfillmentControllerService {
 			log.error("Unrecoverable exception thrown. {}", ex.getLocalizedMessage());
 
 			traceableResponse.getPayload().setMessage(ex.getLocalizedMessage());
-			traceableResponse.getPayload().setStatus(ResponseMessage.INTERNAL_ERROR);
-			
+			if ( ex instanceof MalformedMessageException) {
+				traceableResponse.getPayload().setStatus(ResponseMessage.MALFORMED_MESSAGE);				
+			} else {
+				traceableResponse.getPayload().setStatus(ResponseMessage.INTERNAL_ERROR);
+			}
 			try {
 				kafkaDao.produceCommit(traceableResponse);
 			} catch (Exception iex) {

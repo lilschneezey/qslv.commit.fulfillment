@@ -35,7 +35,7 @@ class Unit_Controller_fulfillCommit {
 	@Mock
 	TransactionDao transactionDao;
 	@Mock
-	private KafkaDao kafkaDao;
+	private KafkaProducerDao kafkaDao;
 	@Mock
 	Acknowledgment acknowledgment;
 	@Captor

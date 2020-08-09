@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
+import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 @SpringBootApplication
 public class FulfillCommitApplication {
@@ -19,7 +20,13 @@ public class FulfillCommitApplication {
 
 	
 	public static void main(String[] args) {
-		SpringApplication application = new SpringApplication(FulfillCommitApplication.class);
+		SpringApplication application = new SpringApplication(FulfillCommitApplication.class);		
+		SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
+	    if (!source.containsProperty("spring.profiles.active") &&
+	            !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
+	    	
+	    	application.setAdditionalProfiles("local");
+	    }
         application.run(args);
 	}
 

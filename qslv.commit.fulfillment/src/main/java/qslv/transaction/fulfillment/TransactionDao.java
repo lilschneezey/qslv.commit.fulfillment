@@ -49,24 +49,27 @@ public class TransactionDao {
 	}
 	
 	public CommitReservationResponse commitReservation(final TraceableMessage<?> message, final CommitReservationRequest request) {
-		log.warn("commitReservation ENTRY");
+		log.trace("commitReservation ENTRY");
 
-		CommitReservationResponse response = callService(message, config.getCommitReservationUrl(), request, commitResponseType);
+		HttpHeaders headers = buildHeaders(message);
+		headers.add(TraceableRequest.ACCEPT_VERSION, CommitReservationRequest.VERSION_1_0);
+
+		CommitReservationResponse response = callService(message, headers, config.getCommitReservationUrl(), request, commitResponseType);
 		int status = response.getStatus();
-		if (status != CommitReservationResponse.SUCCESS && status != CommitReservationResponse.ALREADY_PRESENT ) {
+		if (status != CommitReservationResponse.SUCCESS ) {
 			String msg = String.format("Unexpected return from %s Service. %s", config.getCommitReservationUrl(), response.toString());
 			log.error(msg);
 			throw new NonTransientDataAccessResourceException(msg);
 		}
 
-		log.warn("commitReservation EXIT");
+		log.trace("commitReservation EXIT");
 		return response;
 	}
 
-	private <M,R> R callService(final TraceableMessage<?> message, String url, M request, ParameterizedTypeReference<TimedResponse<R>> typereference) {
-		log.trace("commitReservation ENTRY");
+	private <M,R> R callService(final TraceableMessage<?> message, HttpHeaders headers,
+			String url, M request, ParameterizedTypeReference<TimedResponse<R>> typereference) {
+		log.trace("callService ENTRY");
 
-		HttpHeaders headers = buildHeaders(message);
 		ResponseEntity<TimedResponse<R>> response = null;
 		try {
 			response = retryTemplate.execute(new RetryCallback<ResponseEntity<TimedResponse<R>>, ResourceAccessException>() {
@@ -87,7 +90,7 @@ public class TransactionDao {
 			log.error(msg);
 			throw new NonTransientDataAccessResourceException(msg);
 		}
-		log.trace("commitReservation ENTRY");
+		log.trace("callService ENTRY");
 		return response.getBody().getPayload();
 	}
 	
