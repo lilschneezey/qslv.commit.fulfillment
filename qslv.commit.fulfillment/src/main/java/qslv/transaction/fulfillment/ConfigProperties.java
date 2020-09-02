@@ -10,7 +10,7 @@ import qslv.util.EnableQuickSilver;
 @EnableQuickSilver
 public class ConfigProperties {
 
-	private String aitid = "27834";
+	private String aitid;
 	private String commitReservationUrl;
 	private int restConnectionRequestTimeout = 1000;
 	private int restConnectTimeout = 1000;

@@ -111,7 +111,7 @@ class Unit_Controller_fulfillCommit {
 		//--Verify------------------------
 		verify(kafkaDao).produceCommit(captor.capture());
 		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertNotNull(captor.getValue().getPayload().getMessage());
+		assertNotNull(captor.getValue().getPayload().getErrorMessage());
 	}
 	
 	@Test
@@ -148,7 +148,7 @@ class Unit_Controller_fulfillCommit {
 		//--Verify------------------------
 		verify(kafkaDao, times(2)).produceCommit(captor.capture());
 		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertNotNull(captor.getValue().getPayload().getMessage());
+		assertNotNull(captor.getValue().getPayload().getErrorMessage());
 	}
 	
 	@Test
@@ -185,8 +185,8 @@ class Unit_Controller_fulfillCommit {
 		fulfillmentControllerService.fulfillCommit(request, acknowledgment);		
 		//--Verify------------------------
 		verify(kafkaDao, times(count++)).produceCommit(captor.capture());
-		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertTrue(captor.getValue().getPayload().getMessage().contains("Request UUID"));
+		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.MALFORMED_MESSAGE);
+		assertTrue(captor.getValue().getPayload().getErrorMessage().contains("Request UUID"));
 
 		request.getPayload().setRequestUuid(UUID.randomUUID());
 		request.getPayload().setReservationUuid(null);
@@ -194,8 +194,8 @@ class Unit_Controller_fulfillCommit {
 		fulfillmentControllerService.fulfillCommit(request, acknowledgment);		
 		//--Verify------------------------
 		verify(kafkaDao, times(count++)).produceCommit(captor.capture());
-		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertTrue(captor.getValue().getPayload().getMessage().contains("Reservation UUID"));
+		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.MALFORMED_MESSAGE);
+		assertTrue(captor.getValue().getPayload().getErrorMessage().contains("Reservation UUID"));
 
 		request.getPayload().setReservationUuid(UUID.randomUUID());
 		request.getPayload().setTransactionMetaDataJson(null);
@@ -203,8 +203,8 @@ class Unit_Controller_fulfillCommit {
 		fulfillmentControllerService.fulfillCommit(request, acknowledgment);		
 		//--Verify------------------------
 		verify(kafkaDao, times(count++)).produceCommit(captor.capture());
-		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertTrue(captor.getValue().getPayload().getMessage().contains("Meta Data"));
+		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.MALFORMED_MESSAGE);
+		assertTrue(captor.getValue().getPayload().getErrorMessage().contains("Meta Data"));
 
 		request.getPayload().setTransactionMetaDataJson("{}");
 		
@@ -214,8 +214,8 @@ class Unit_Controller_fulfillCommit {
 		fulfillmentControllerService.fulfillCommit(request, acknowledgment);		
 		//--Verify------------------------
 		verify(kafkaDao, times(count++)).produceCommit(captor.capture());
-		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertTrue(captor.getValue().getPayload().getMessage().contains("AIT"));
+		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.MALFORMED_MESSAGE);
+		assertTrue(captor.getValue().getPayload().getErrorMessage().contains("AIT"));
 
 		request.setProducerAit("27384");
 		request.setCorrelationId(null);
@@ -223,8 +223,8 @@ class Unit_Controller_fulfillCommit {
 		fulfillmentControllerService.fulfillCommit(request, acknowledgment);		
 		//--Verify------------------------
 		verify(kafkaDao, times(count++)).produceCommit(captor.capture());
-		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertTrue(captor.getValue().getPayload().getMessage().contains("Correlation"));
+		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.MALFORMED_MESSAGE);
+		assertTrue(captor.getValue().getPayload().getErrorMessage().contains("Correlation"));
 
 		request.setCorrelationId("234273984728934");
 		request.setBusinessTaxonomyId(null);
@@ -232,8 +232,8 @@ class Unit_Controller_fulfillCommit {
 		fulfillmentControllerService.fulfillCommit(request, acknowledgment);		
 		//--Verify------------------------
 		verify(kafkaDao, times(count++)).produceCommit(captor.capture());
-		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertTrue(captor.getValue().getPayload().getMessage().contains("Business Taxonomy Id"));
+		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.MALFORMED_MESSAGE);
+		assertTrue(captor.getValue().getPayload().getErrorMessage().contains("Business Taxonomy Id"));
 
 		request.setBusinessTaxonomyId("989234230489");
 		request.setMessageCreationTime(null);
@@ -241,8 +241,8 @@ class Unit_Controller_fulfillCommit {
 		fulfillmentControllerService.fulfillCommit(request, acknowledgment);		
 		//--Verify------------------------
 		verify(kafkaDao, times(count++)).produceCommit(captor.capture());
-		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertTrue(captor.getValue().getPayload().getMessage().contains("Message Creation Time"));
+		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.MALFORMED_MESSAGE);
+		assertTrue(captor.getValue().getPayload().getErrorMessage().contains("Message Creation Time"));
 
 		request.setMessageCreationTime(LocalDateTime.now());
 		CommitReservationRequest save = request.getPayload();
@@ -251,8 +251,8 @@ class Unit_Controller_fulfillCommit {
 		fulfillmentControllerService.fulfillCommit(request, acknowledgment);		
 		//--Verify------------------------
 		verify(kafkaDao, times(count++)).produceCommit(captor.capture());
-		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.INTERNAL_ERROR);
-		assertTrue(captor.getValue().getPayload().getMessage().contains("Fulfillment Message"));
+		assertEquals(captor.getValue().getPayload().getStatus(), ResponseMessage.MALFORMED_MESSAGE);
+		assertTrue(captor.getValue().getPayload().getErrorMessage().contains("Fulfillment Message"));
 
 		request.setPayload(save);
 		

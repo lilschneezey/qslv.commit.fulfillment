@@ -22,7 +22,6 @@ import qslv.common.kafka.TraceableMessage;
 import qslv.transaction.request.CommitReservationRequest;
 
 @Configuration
-@Profile("!test")
 public class KafkaListenerConfig {
 	private static final Logger log = LoggerFactory.getLogger(KafkaListenerConfig.class);
 
@@ -31,6 +30,7 @@ public class KafkaListenerConfig {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Bean
+	@Profile("!test")
 	public Map<String,Object> listenerConfig() throws Exception {
 		Properties kafkaconfig = new Properties();
 		try {

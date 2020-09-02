@@ -21,7 +21,7 @@ public class KafkaCommitListener {
 		this.fulfillmentController = fulfillmentController;
 	}
 
-	@KafkaListener(topics = "commit.fulfillment.request.queue")
+	@KafkaListener(topics = "#{ @configProperties.kafkaCommitRequestQueue }")
 	void onCommitMessage(final ConsumerRecord<String, TraceableMessage<CommitReservationRequest>> data, Acknowledgment acknowledgment) {
 		log.trace("onMessage ENTRY");
 
